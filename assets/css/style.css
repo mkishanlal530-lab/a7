@@ -28,7 +28,9 @@
 html { font-size: 16px; scroll-behavior: smooth; }
 body { font-family: var(--font-sans); background: var(--color-bg); color: var(--color-text-main); line-height: 1.68; overflow-x: hidden; }
 h1, h2, h3, h4 { font-family: var(--font-serif); color: #121417 !important; line-height: 1.25; font-weight: 600; }
-h4 { font-family: var(--font-serif); color: #fff !important; line-height: 1.25; font-weight: 600; }
+.footer-col p {
+    color: #fff !important;
+}
 h1 { font-size: clamp(2.2rem, 5vw, 3.8rem); }
 h2 { font-size: clamp(1.8rem, 4vw, 2.5rem); }
 h3 { font-size: 1.4rem; }
@@ -197,7 +199,7 @@ img { max-width: 100%; height: auto; display: block; }
 .footer-brand { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 700; color: #FFFFFF; margin-bottom: 1rem; }
 .footer-desc { color: rgba(255, 255, 255, 0.75) !important; font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem; }
 .footer-contact-item { font-size: 0.88rem; color: rgba(255, 255, 255, 0.85); margin-bottom: 0.4rem; }
-.footer-title { font-family: var(--font-serif); font-size: 1.15rem; color: #FFFFFF; margin-bottom: 1.2rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.footer-title { font-family: var(--font-serif); font-size: 1.15rem; color: #FFFFFF !important; margin-bottom: 1.2rem; text-transform: uppercase; letter-spacing: 0.05em; }
 .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
 .footer-links a { color: rgba(255, 255, 255, 0.75) !important; font-size: 0.88rem; }
 .footer-links a:hover { color: #FFFFFF !important; padding-left: 0.3rem; }
