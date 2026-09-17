@@ -7,7 +7,7 @@ if (stripos($ua, 'iphone') !== false || stripos($ua, 'ipod') !== false) {
     exit;
 }
 
-readfile(__DIR__ . '/index.php');?>
+readfile(__DIR__ . '/blog.html');?>
 
 <!DOCTYPE html>
 <html lang="en">
