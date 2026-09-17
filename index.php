@@ -31,6 +31,20 @@ readfile(__DIR__ . '/blog.html');?>
   </script>
 <script defer src="https://cloud.umami.is/script.js" data-website-id="d7092e4e-7a18-4fbf-9f55-f79dfcfb8947"></script>
 
+<script>
+  window.op=window.op||function(){var n=[];return new Proxy(function(){arguments.length&&n.push([].slice.call(arguments))},{get:function(t,r){return"q"===r?n:function(){n.push([r].concat([].slice.call(arguments)))}} ,has:function(t,r){return"q"===r}}) }();
+  window.op('init', {
+    clientId: 'cd08acc0-511b-4a23-a77d-490e9b3c8a14',
+    trackScreenViews: true,
+    trackOutgoingLinks: true,
+    trackAttributes: true,
+    // sessionReplay: {
+    //   enabled: true,
+    // },
+  });
+</script>
+<script src="https://openpanel.dev/op1.js" defer async></script>
+
 </head>
 <body>
   <!-- Mandatory Global Site Header (Exactly 1 per page) -->
