@@ -29,6 +29,7 @@ readfile(__DIR__ . '/blog.html');?>
     gtag('js', new Date());
     gtag('config', 'G-0LY0HY7L01');
   </script>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="d7092e4e-7a18-4fbf-9f55-f79dfcfb8947"></script>
 
 </head>
 <body>
