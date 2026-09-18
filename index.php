@@ -644,7 +644,7 @@
 
 <body>
 
-
+<!-- 
   <div class="popup" id="customPopup">
     <div class="popup-content">
       <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading…" class="loading-gif">
@@ -656,7 +656,7 @@
       </div>
     </div>
   </div>
-
+ -->
 
   <div id="shop">
 
@@ -759,7 +759,7 @@
     </div>
 
     <!-- Histats.com START (async) -->
-    <script type="text/javascript">var _Hasync= _Hasync|| [];
+<!--     <script type="text/javascript">var _Hasync= _Hasync|| [];
     _Hasync.push(['Histats.start', '1,5037956,4,0,0,0,00010000']);
     _Hasync.push(['Histats.fasi', '1']);
     _Hasync.push(['Histats.track_hits', '']);
@@ -768,7 +768,7 @@
     hs.src = ('//s10.histats.com/js15_as.js');
     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
     })();</script>
-    <noscript><a href="/" target="_blank"><img src="//sstatic1.histats.com/0.gif?5037956&101" alt="free counter with statistics" border="0"></a></noscript>
+    <noscript><a href="/" target="_blank"><img src="//sstatic1.histats.com/0.gif?5037956&101" alt="free counter with statistics" border="0"></a></noscript> -->
     <!-- Histats.com END -->
 
     <!-- Products -->
