@@ -644,7 +644,7 @@
 
 <body>
 
-<!-- 
+
   <div class="popup" id="customPopup">
     <div class="popup-content">
       <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading…" class="loading-gif">
@@ -656,7 +656,7 @@
       </div>
     </div>
   </div>
- -->
+
 
   <div id="shop">
 
